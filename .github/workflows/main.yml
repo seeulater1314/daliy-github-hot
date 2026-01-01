@@ -1,0 +1,40 @@
+name: Daily GitHub Trending Push
+
+on:
+  # 1. 定时触发
+  schedule:
+    # 这里的写法是 cron 表达式
+    # 注意：GitHub 用的是 UTC 时间，比北京时间慢 8 小时
+    # '0 0 * * *' 代表 UTC 0:00 -> 北京时间 早上 8:00
+    - cron: '0 0 * * *'
+  
+  # 2. 允许手动触发 (方便测试)
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 第一步：把代码拉下来
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    # 第二步：安装 Python 环境
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    # 第三步：安装依赖库
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        
+    # 第四步：运行脚本 (并注入密钥)
+    - name: Run script
+      env:
+        # 这里把 GitHub 后台存的密钥，注入给 Python 脚本
+        FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+        FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+      run: python main.py
