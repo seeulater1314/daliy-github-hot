@@ -8,7 +8,7 @@ import time
 from datetime import datetime
 
 # 配置部分 (实际运行时会从环境变量读取)
-# 飞书 Webhook 地址
+# 飞书 Webhook 地址 //测试
 # 从环境变量获取，如果获取不到（比如本地运行），就使用后面的默认值或者 None
 FEISHU_WEBHOOK = os.getenv("FEISHU_WEBHOOK")
 FEISHU_SECRET = os.getenv("FEISHU_SECRET")
